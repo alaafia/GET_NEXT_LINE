@@ -12,73 +12,96 @@
 
 #include "get_next_line.h"
 
-size_t				ft_strlen(const char *s)
+size_t	ft_strlen(const char *str)
 {
-	size_t			i;
+	size_t	i;
 
 	i = 0;
-	while (s[i])
+	while (str[i] != '\0')
 		i++;
 	return (i);
 }
 
-char				*ft_strchr(const char *s, int c)
+char	*ft_strdup(const char *s1)
 {
-	size_t				i;
-	size_t				n;
-	char				*str;
+	int		i;
+	char	*t;
 
-	str = (char *)s;
 	i = 0;
-	n = ft_strlen(str);
-	while (i <= n)
+	while (s1[i])
+		i++;
+	if (!(t = malloc(sizeof(char) * (i + 1))))
+		return (NULL);
+	i = 0;
+	while (s1[i])
 	{
-		if (str[i] == c)
-			return (str + i);
+		t[i] = s1[i];
 		i++;
 	}
+	t[i] = '\0';
+	return (t);
+}
+
+char	*ft_strsub(char const *s, unsigned int start, size_t len)
+{
+	char	*fresh;
+	int		i;
+
+	if (!s)
+		return (NULL);
+	fresh = malloc((len + 1) * sizeof(char));
+	i = 0;
+	if (!fresh)
+		return (NULL);
+	fresh[len] = '\0';
+	while (len--)
+	{
+		fresh[i] = s[start];
+		i++;
+		start++;
+	}
+	return (fresh);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*s3;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	if (!(s3 = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+		return (NULL);
+	while (s1[i])
+	{
+		s3[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		s3[i] = s2[j];
+		i++;
+		j++;
+	}
+	s3[i] = '\0';
+	return (s3);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	unsigned char	*a;
+
+	a = (unsigned char *)s;
+	while (*a)
+	{
+		if (*a == (unsigned char)c)
+			return ((char*)a);
+		a++;
+	}
+	if (*a == (unsigned char)c)
+		return ((char*)a);
 	return (NULL);
-}
-
-char				*ft_strdup(const char *src)
-{
-	char				*d;
-	int					i;
-
-	if (!(d = (char *)malloc(sizeof(char) * ft_strlen(src) + 1)))
-		return (NULL);
-	i = 0;
-	while (src[i])
-	{
-		d[i] = src[i];
-		i++;
-	}
-	d[i] = '\0';
-	return (d);
-}
-
-void				*ft_memset(void *str, int c, size_t n)
-{
-	size_t						i;
-	unsigned char				*dest;
-
-	i = 0;
-	dest = (unsigned char*)str;
-	while (i < n)
-	{
-		dest[i] = (unsigned char)c;
-		i++;
-	}
-	return ((void*)dest);
-}
-
-void				*ft_calloc(size_t nbr, size_t s)
-{
-	void				*p;
-
-	p = malloc(nbr * s);
-	if (!p)
-		return (NULL);
-	ft_memset(p, 0, (nbr * s));
-	return (p);
 }
